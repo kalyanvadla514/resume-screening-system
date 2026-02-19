@@ -95,6 +95,24 @@ cd backend
 # Install dependencies
 npm install
 
+# If you see EBADENGINE or deprecated warnings: the install still succeeds. Those come from 
+# old transitive dependencies (e.g. from pdf-parse). You can ignore them to run the app.
+# To fix some security issues, run: npm audit fix
+
+# better to remove previous npm and fresh start it with
+# Remove project dependencies and lock file
+# If it runs perfectly better skip till next "npm install"(line : 112)
+Remove-Item -Recurse -Force node_modules -ErrorAction SilentlyContinue
+Remove-Item -Force package-lock.json -ErrorAction SilentlyContinue
+
+# Clear npm cache (optional but thorough)
+npm cache clean --force
+
+# Reinstall from scratch
+npm install
+
+
+
 # Create environment file
 cp .env.example .env
 
@@ -109,6 +127,8 @@ npm run dev
 ```
 
 The backend will run on `http://localhost:5000`
+
+**If `npm install` shows warnings:** You may see `EBADENGINE` or "deprecated" messages for packages like `hawk`, `request`, or `hoek`. These come from old transitive dependencies (e.g. used by `pdf-parse`). **The install still succeeds** and the app will run. To fix some of the reported security issues, run `npm audit fix` (use `npm audit fix --force` only if you accept possible breaking changes).
 
 ### 3. ML Service Setup
 
